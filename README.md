@@ -1,6 +1,7 @@
 Print Server
+=======
+HTTP Print server using lpr command. You can easily drag & drop files to the server.
 
-----
 
 # Installation
 
