@@ -4,7 +4,7 @@ Print Server
 
 # Installation
 
-Call `bash install.sh`
+`bash install.sh`
 
 # Run
 
