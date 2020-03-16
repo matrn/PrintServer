@@ -2,4 +2,10 @@ Print Server
 
 ----
 
-`python3.7 server.py`
+# Installation
+
+Call `bash install.sh`
+
+# Run
+
+`bash run.sh`
