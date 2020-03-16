@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">	
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>Print Server</title>
+	
+	<link rel="stylesheet" href="/s/css/bootstrap-4.4.1.min.css">
+	<style>
+		#drop-zone {
+			width: 100%;
+			height: 100%;
+		}
+
+		#drop-zone[drop-active=true] {
+			box-shadow: inset 0px 0px 0px 5px #00C;
+		}
+	</style>
+<body>	
+	<div id="app">
+		<nav class="navbar navbar-expand-md navbar-dark bg-primary">
+			<div class="container">
+				<a class="navbar-brand" href="{{ reverse_url("index") }}">PrintServer</a>
+				
+				<button class="navbar-toggler" type="button" data-toggle="collapse"
+					data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+					aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<!-- Left Side Of Navbar -->
+					<ul class="navbar-nav mr-auto">
+						<li class="nav-item">
+							<a class="nav-link" href="{{ reverse_url("home") }}">Home</a>
+						</li>
+						
+
+					   
+					</ul>
+					
+					<!-- Right Side Of Navbar -->
+					<ul class="navbar-nav ml-auto">
+					   
+					</ul>
+				</div>
+			</div>
+		</nav>
+
+		<main class="py-4">
+			<div class="container-xl">
+				
+				<div id="drop-zone" dragable="true" class="border rounded bg-secondary text-center p-5">
+					<h1>Drag and Drop files here</h1>
+				</div>
+				<div id="info-box" class="border py-4 px-1">
+				</div>
+
+			</div>
+		</main>
+
+
+	<script>
+		let count = 1;
+
+		function log_info(text){
+			let box = document.getElementById('info-box');
+			box.innerHTML = '<span>'+ count + '. </span>' + text + '<br>' + box.innerHTML;
+			count ++;
+		}
+
+
+		function uploadFile(file) {
+		  var url = '/upload'
+		  var xhr = new XMLHttpRequest()
+		  var formData = new FormData()
+		  xhr.open('POST', url, true)
+
+		  xhr.addEventListener('readystatechange', function(e) {
+			if (this.readyState == 4){
+				let body = this.responseText;
+				if(this.status == 200) {
+			  		log_info('<span class="h4 rounded border">' + body + '</span>');
+				}
+				else{
+					log_info('<span class="h4 rounded bg-danger">ERROR ' + this.status + ":" + body + '</span>');
+				}
+			}
+		  })
+
+		  formData.append('file', file)
+		  xhr.send(formData)
+		}
+
+		function dropHandler(ev) {
+		  console.log('File(s) dropped');
+
+		  // Prevent default behavior (Prevent file from being opened)
+		  ev.preventDefault();
+
+		  if (ev.dataTransfer.items) {
+			// Use DataTransferItemList interface to access the file(s)
+			for (var i = 0; i < ev.dataTransfer.items.length; i++) {
+			  // If dropped items aren't files, reject them
+			  if (ev.dataTransfer.items[i].kind === 'file') {
+				var file = ev.dataTransfer.items[i].getAsFile();
+				uploadFile(file);
+				console.log('... file[' + i + '].name = ' + file.name);
+			  }
+			}
+		  } else {
+			// Use DataTransfer interface to access the file(s)
+			for (var i = 0; i < ev.dataTransfer.files.length; i++) {
+			  console.log('... file[' + i + '].name = ' + ev.dataTransfer.files[i].name);
+			}
+		  }
+		}
+
+		function dragOverHandler(ev) {
+		  console.log('File(s) in drop zone'); 
+
+		  // Prevent default behavior (Prevent file from being opened)
+		  ev.preventDefault();
+		  this.setAttribute('drop-active', true);
+		}
+
+		function dragLeaveHandler(ev) {
+			console.log('drag leave');
+		  this.setAttribute('drop-active', false);
+		}
+
+		let drop_zone = document.getElementById('drop-zone');
+		drop_zone.ondrop = dropHandler;
+		drop_zone.ondragover = dragOverHandler;
+		drop_zone.ondragleave = dragLeaveHandler;
+	</script>
+</body>
+</html>
