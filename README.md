@@ -3,10 +3,10 @@ Print Server
 HTTP Print server using lpr command. You can easily drag & drop files to the server.
 
 
-# Installation
+## Installation
 
 `bash install.sh`
 
-# Run
+## Run
 
 `bash run.sh`
