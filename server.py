@@ -89,4 +89,3 @@ if __name__ == '__main__':
 		print("Calling lprm")
 		subprocess.run(['lprm'])
 		subprocess.run(['lprm'])
-		subprocess.run(['lprm'])
