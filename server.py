@@ -36,7 +36,7 @@ class UploadHandler(tornado.web.RequestHandler):
 		if extension not in supported_extensions:
 			self.set_status(400)
 			return self.finish('Unsupported extension')
-		
+
 		fname = ''.join(random.choice(string.ascii_lowercase + string.digits) for x in range(6))
 		final_filename = fname + extension
 		file_path = "./uploads/" + final_filename
@@ -87,4 +87,6 @@ if __name__ == '__main__':
 	except KeyboardInterrupt:
 		print("Ending..")
 		print("Calling lprm")
+		subprocess.run(['lprm'])
+		subprocess.run(['lprm'])
 		subprocess.run(['lprm'])
