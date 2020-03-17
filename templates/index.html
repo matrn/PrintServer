@@ -117,19 +117,20 @@
 			  console.log('... file[' + i + '].name = ' + ev.dataTransfer.files[i].name);
 			}
 		  }
+		  this.setAttribute('drop-active', false);
 		}
 
 		function dragOverHandler(ev) {
 		  console.log('File(s) in drop zone'); 
 
-		  // Prevent default behavior (Prevent file from being opened)
-		  ev.preventDefault();
-		  this.setAttribute('drop-active', true);
+			// Prevent default behavior (Prevent file from being opened)
+			ev.preventDefault();
+			this.setAttribute('drop-active', true);
 		}
 
 		function dragLeaveHandler(ev) {
 			console.log('drag leave');
-		  this.setAttribute('drop-active', false);
+			this.setAttribute('drop-active', false);
 		}
 
 		let drop_zone = document.getElementById('drop-zone');

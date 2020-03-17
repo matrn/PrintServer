@@ -9,3 +9,7 @@ source .venv/bin/activate
 
 echo "Installing packages.."
 pip install -r requirements.txt
+
+echo "Creating uploads directory.."
+mkdir -p uploads
+
