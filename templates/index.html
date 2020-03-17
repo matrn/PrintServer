@@ -52,8 +52,9 @@
 		<main class="py-4">
 			<div class="container-xl">
 				
-				<div id="drop-zone" dragable="true" class="border rounded bg-secondary text-center p-5">
+				<div id="drop-zone" dragable="true" class="border rounded bg-info text-center p-5">
 					<h1>Drag and Drop files here</h1>
+					<h3>Only {% for ext in supported_extensions %}<span class="badge-pill bg-secondary">{{ ext }}</span>{% end %} files are supported</h3>
 				</div>
 				<div id="info-box" class="border py-4 px-1">
 				</div>

@@ -20,10 +20,11 @@ except ImportError:
 
 HTTP_PORT = 8000
 
+supported_extensions = ['.pdf','.png','.jpg','.jpeg','.gif']
 
 class MainHandler(tornado.web.RequestHandler):
 	def get(self):
-		return self.render('index.html')
+		return self.render('index.html', supported_extensions = supported_extensions)
 
 class UploadHandler(tornado.web.RequestHandler):
 	def post(self):
@@ -32,6 +33,10 @@ class UploadHandler(tornado.web.RequestHandler):
 		body = file['body']
 
 		extension = os.path.splitext(filename)[1]
+		if extension not in supported_extensions:
+			self.set_status(400)
+			return self.finish('Unsupported extension')
+		
 		fname = ''.join(random.choice(string.ascii_lowercase + string.digits) for x in range(6))
 		final_filename = fname + extension
 		file_path = "./uploads/" + final_filename
