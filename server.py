@@ -48,7 +48,7 @@ class UploadHandler(tornado.web.RequestHandler):
 
 
 
-		lpr_args = ['lpr', '-r', '-o', 'media=a4']
+		lpr_args = ['lpr', '-r', '-o', 'media=A4', '-o', 'fit-to-page']
 		if double_sided:
 			lpr_args.append('-o')
 			lpr_args.append('sides=two-sided-long-edge')
@@ -57,7 +57,7 @@ class UploadHandler(tornado.web.RequestHandler):
 			lpr_args.append('sides=one-sided')
 
 		lpr_args.append(file_path)
-		
+
 
 		result = subprocess.run(lpr_args, stdout=subprocess.PIPE)
 		#print(file_path)
