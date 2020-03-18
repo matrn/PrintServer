@@ -73,9 +73,14 @@ class UploadHandler(tornado.web.RequestHandler):
 		self.finish(finish_msg)
 
 
+
+favicon_path = os.path.join(os.path.dirname(__file__), "static/img/favicon.ico")
+static_path = os.path.join(os.path.dirname(__file__), "static")
+templates_path = os.path.join(os.path.dirname(__file__), "templates")
+
 settings = {
-	"template_path" : os.path.join(os.path.dirname(__file__), "templates"),
-	"static_path" : os.path.join(os.path.dirname(__file__), "static"),
+	"template_path" : templates,
+	"static_path" : static_path,
 	"static_url_prefix" : "/s/",
 	"cookie_secret" : token_urlsafe(24),  #token_urlsafe(24)
 	#"login_url" : "/login",
@@ -83,10 +88,6 @@ settings = {
 	#"xsrf_cookies": True,
 }
 
-
-
-favicon_path = os.path.join(os.path.dirname(__file__), "static/img/favicon.ico")
-static_path = os.path.join(os.path.dirname(__file__), "static")
 
 def make_app():
 	return tornado.web.Application([
