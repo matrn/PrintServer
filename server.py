@@ -39,7 +39,7 @@ class UploadHandler(tornado.web.RequestHandler):
 		extension = os.path.splitext(filename)[1]   #parse extension
 		if extension not in supported_extensions:   #check if extension is supported
 			self.set_status(400)
-			return self.finish('Unsupported extension')
+			return self.finish('Unsupported filetype')
 
 
 		fname = ''.join(random.choice(string.ascii_lowercase + string.digits) for x in range(6))   #generate random filename
