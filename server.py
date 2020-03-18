@@ -28,6 +28,8 @@ class MainHandler(tornado.web.RequestHandler):
 
 class UploadHandler(tornado.web.RequestHandler):
 	def post(self):
+		double_sided = True if self.get_argument('double-sided').lower() in ['true', '1', 'high'] else False
+
 		file = self.request.files['file'][0]
 		filename = file['filename']
 		body = file['body']
@@ -44,14 +46,23 @@ class UploadHandler(tornado.web.RequestHandler):
 		with open(file_path, 'wb') as f:
 			f.write(file['body'])
 
-		result = subprocess.run(['lpr', file_path], stdout=subprocess.PIPE)
+
+
+		lpr_args = ['lpr', file_path, '-r']
+		if double_sided:
+			lpr_args.append('-o')
+			lpr_args.append('sides=two-sided-long-edge')
+
+		result = subprocess.run(lpr_args, stdout=subprocess.PIPE)
 		#print(file_path)
 		if result.stderr:
 			print("ERROR >%s<" % result.stderr)
 
-		os.remove(file_path)
+		#os.remove(file_path)
 
-		self.finish("Printing %s, stdout >%s<, stderr >%s<" % (filename, result.stdout, result.stderr))
+		finish_msg = "Printing %s%s, stdout >%s<, stderr >%s<" % (filename, ' Double-Sided' if double_sided else '', result.stdout, result.stderr)
+		print(finish_msg)
+		self.finish(finish_msg)
 
 
 settings = {
@@ -87,5 +98,5 @@ if __name__ == '__main__':
 	except KeyboardInterrupt:
 		print("Ending..")
 		print("Calling lprm")
-		subprocess.run(['lprm'])
+		subprocess.run(['lprm', '-'])
 		subprocess.run(['lprm'])
