@@ -83,6 +83,8 @@ settings = {
 	#"xsrf_cookies": True,
 }
 
+
+
 favicon_path = os.path.join(os.path.dirname(__file__), "static/img/favicon.ico")
 static_path = os.path.join(os.path.dirname(__file__), "static")
 
