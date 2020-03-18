@@ -3,7 +3,6 @@
 import tornado.web
 import tornado.ioloop
 import os
-from mimetypes import guess_type
 from time import sleep
 import subprocess
 from tornado.web import url, authenticated
@@ -18,36 +17,40 @@ except ImportError:
 	def token_urlsafe(nbytes=None):
 		return urandom(nbytes).hex()
 
-HTTP_PORT = 8000
 
+HTTP_PORT = 8000
+DEBUG = True
 supported_extensions = ['.pdf','.png','.jpg','.jpeg','.gif']
+
 
 class MainHandler(tornado.web.RequestHandler):
 	def get(self):
 		return self.render('index.html', supported_extensions = supported_extensions)
 
+
 class UploadHandler(tornado.web.RequestHandler):
 	def post(self):
-		double_sided = True if self.get_argument('double-sided').lower() in ['true', '1', 'high'] else False
+		double_sided = True if self.get_argument('double-sided').lower() in ['true', '1', 'high'] else False   #get double-sided URL argument
 
-		file = self.request.files['file'][0]
-		filename = file['filename']
-		body = file['body']
+		file = self.request.files['file'][0]   #get file from multipart data
+		filename = file['filename']   #get filename
+		body = file['body']   #get body
 
-		extension = os.path.splitext(filename)[1]
-		if extension not in supported_extensions:
+		extension = os.path.splitext(filename)[1]   #parse extension
+		if extension not in supported_extensions:   #check if extension is supported
 			self.set_status(400)
 			return self.finish('Unsupported extension')
 
-		fname = ''.join(random.choice(string.ascii_lowercase + string.digits) for x in range(6))
+
+		fname = ''.join(random.choice(string.ascii_lowercase + string.digits) for x in range(6))   #generate random filename
 		final_filename = fname + extension
 		file_path = "./uploads/" + final_filename
 		
 		with open(file_path, 'wb') as f:
-			f.write(file['body'])
+			f.write(file['body'])   #write data to file
 
 
-
+		#generate lpr command options
 		lpr_args = ['lpr', '-r', '-o', 'media=A4', '-o', 'fit-to-page']
 		if double_sided:
 			lpr_args.append('-o')
@@ -55,14 +58,13 @@ class UploadHandler(tornado.web.RequestHandler):
 		else:
 			lpr_args.append('-o')
 			lpr_args.append('sides=one-sided')
-
 		lpr_args.append(file_path)
 
 
-		result = subprocess.run(lpr_args, stdout=subprocess.PIPE)
+		result = subprocess.run(lpr_args, stdout=subprocess.PIPE)   #run lpr command
 		#print(file_path)
 		if result.stderr:
-			print("ERROR >%s<" % result.stderr)
+			print("ERROR >%s<" % result.stderr, flush = True)
 
 		#os.remove(file_path)
 
@@ -77,7 +79,7 @@ settings = {
 	"static_url_prefix" : "/s/",
 	"cookie_secret" : token_urlsafe(24),  #token_urlsafe(24)
 	#"login_url" : "/login",
-	"debug" : True,
+	"debug" : DEBUG,
 	#"xsrf_cookies": True,
 }
 
@@ -94,6 +96,7 @@ def make_app():
 	], **settings)
 
 
+
 if __name__ == '__main__':
 	app = make_app()
 	app.listen(HTTP_PORT)
@@ -104,5 +107,5 @@ if __name__ == '__main__':
 	except KeyboardInterrupt:
 		print("Ending..")
 		print("Calling lprm")
-		subprocess.run(['lprm', '-'])
+		subprocess.run(['lprm', '-'])   #cancel all print jobs
 		subprocess.run(['lprm'])
