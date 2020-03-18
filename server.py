@@ -79,7 +79,7 @@ static_path = os.path.join(os.path.dirname(__file__), "static")
 templates_path = os.path.join(os.path.dirname(__file__), "templates")
 
 settings = {
-	"template_path" : templates,
+	"template_path" : templates_path,
 	"static_path" : static_path,
 	"static_url_prefix" : "/s/",
 	"cookie_secret" : token_urlsafe(24),  #token_urlsafe(24)
