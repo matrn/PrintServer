@@ -83,13 +83,13 @@ settings = {
 	#"xsrf_cookies": True,
 }
 
-#favicon_path = os.path.join(os.path.dirname(__file__), "static/img/favicon.ico")
-#static_path = os.path.join(os.path.dirname(__file__), "static")
+favicon_path = os.path.join(os.path.dirname(__file__), "static/img/favicon.ico")
+static_path = os.path.join(os.path.dirname(__file__), "static")
 
 def make_app():
 	return tornado.web.Application([
-		#(r'/(favicon\.ico)', tornado.web.StaticFileHandler, {'path': favicon_path }),
-		#(r'/s/(.*)', tornado.web.StaticFileHandler, {'path': static_path }),
+		(r'/(favicon\.ico)', tornado.web.StaticFileHandler, {'path': favicon_path }),
+		(r'/s/(.*)', tornado.web.StaticFileHandler, {'path': static_path }),
 		url(r"/", MainHandler, name = 'index'),
 		url(r"/home", MainHandler, name = 'home'),
 		url(r"/upload", UploadHandler, name = 'upload'),
