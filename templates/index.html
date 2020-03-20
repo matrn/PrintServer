@@ -27,6 +27,13 @@
 		#drop-zone[drop-active=true] {
 			box-shadow: inset 0px 0px 0px 5px #00C;
 		}
+
+		.sw-checkbox:checked ~ span .sw-on {
+			color: black;
+		}
+		.sw-checkbox:not(:checked) ~ span .sw-off {
+			color: black;
+		}
 	</style>
 <body>	
 	<div id="app">
@@ -57,27 +64,27 @@
 		</nav>
 
 		<main class="py-4">
-			<div class="container-xl">
-				<div class="container-fluid border rounded">
-					<label class="switch-light row align-items-center p-2" onclick="">
-					 	<input id="sides" type="checkbox" autocomplete="off">
+			<div class="container">
+				<div class="container-fluid border rounded border-dark my-1">
+					<label class="switch-light row align-items-center p-2">
+					 	<input id="sides" class="sw-checkbox" type="checkbox" autocomplete="off">
 						<strong class="font-weight-bold mx-10 columns ml-2 mr-5">
 							Sides: 
 						</strong>
 
-						<span class="font-weight-bold border border-secondary rounded w-25 columns align-items-cente">
-							<span>One-sided</span>
-							<span>Double-sided</span>						
+						<span class="font-weight-bold border border-secondary rounded columns align-items-center w-50 text-white">
+							<span class="sw-on">One-sided</span>
+							<span class="sw-off">Double-sided</span>						
 							<a class="btn btn-primary"></a>
 						</span>
 					</label>
 				</div>
 
-				<div id="drop-zone" dragable="true" class="border rounded bg-info text-center p-5">
+				<div id="drop-zone" dragable="true" class="border rounded bg-dark text-center p-5 text-white border-dark my-1">
 					<h1>Drag and Drop files here</h1>
-					<h3>Only {% for ext in supported_extensions %}<span class="badge-pill bg-secondary">{{ ext }}</span>{% end %} files are supported</h3>
+					<h3>Only {% for ext in supported_extensions %}<span class="badge badge-pill bg-secondary">{{ ext }}</span>{% end %} files are supported</h3>
 				</div>
-				<div id="info-box" class="border py-4 px-1">
+				<div id="info-box" class="border py-4 px-1 border-dark my-1 rounded">
 				</div>
 
 			</div>
