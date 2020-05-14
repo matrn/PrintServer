@@ -32,9 +32,14 @@ class UploadHandler(tornado.web.RequestHandler):
 	def post(self):
 		double_sided = True if self.get_argument('double-sided').lower() in ['true', '1', 'high'] else False   #get double-sided URL argument
 
-		file = self.request.files['file'][0]   #get file from multipart data
-		filename = file['filename']   #get filename
-		body = file['body']   #get body
+		file = self.request.files.get('file')   #get file from multipart data
+		if file == None:
+			self.set_status(400)
+			return self.finish('Missing file argument')
+
+		file = file[0]
+		filename = file.get('filename')   #get filename
+		body = file.get('body')   #get body
 
 		extension = os.path.splitext(filename)[1]   #parse extension
 		if extension not in supported_extensions:   #check if extension is supported
