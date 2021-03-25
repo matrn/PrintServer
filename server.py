@@ -42,7 +42,7 @@ class UploadHandler(tornado.web.RequestHandler):
 		body = file.get('body')   #get body
 
 		extension = os.path.splitext(filename)[1]   #parse extension
-		if extension not in supported_extensions:   #check if extension is supported
+		if extension.lower() not in supported_extensions:   #check if extension is supported
 			self.set_status(400)
 			return self.finish('Unsupported filetype')
 
